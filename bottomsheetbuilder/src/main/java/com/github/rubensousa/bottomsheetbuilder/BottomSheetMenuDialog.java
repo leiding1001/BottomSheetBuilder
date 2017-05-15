@@ -23,19 +23,15 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
-import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
-import com.github.rubensousa.bottomsheetbuilder.util.BottomSheetBuilderUtils;
 
-public class BottomSheetMenuDialog extends BottomSheetDialog implements BottomSheetItemClickListener {
+public class BottomSheetMenuDialog extends BottomSheetDialog {
 
     BottomSheetBehavior.BottomSheetCallback mCallback;
     BottomSheetBehavior mBehavior;
-    private BottomSheetItemClickListener mClickListener;
     private AppBarLayout mAppBarLayout;
     private boolean mExpandOnStart;
     private boolean mDelayDismiss;
@@ -158,33 +154,7 @@ public class BottomSheetMenuDialog extends BottomSheetDialog implements BottomSh
         mCallback = callback;
     }
 
-    public void setBottomSheetItemClickListener(BottomSheetItemClickListener listener) {
-        mClickListener = listener;
-    }
 
-    public BottomSheetBehavior getBehavior() {
-        return mBehavior;
-    }
-
-    @Override
-    public void onBottomSheetItemClick(MenuItem item) {
-        if (!mClicked) {
-
-            if (mBehavior != null) {
-                if (mDelayDismiss) {
-                    BottomSheetBuilderUtils.delayDismiss(mBehavior);
-                } else {
-                    mBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            }
-
-            if (mClickListener != null) {
-                mClickListener.onBottomSheetItemClick(item);
-            }
-
-            mClicked = true;
-        }
-    }
 
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCallback
             = new BottomSheetBehavior.BottomSheetCallback() {

@@ -26,4 +26,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile project(':bottomsheetbuilder')
+    compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+
+
 }

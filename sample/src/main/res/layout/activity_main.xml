@@ -19,29 +19,24 @@
             android:layout_height="wrap_content"
             android:text="View with a grid" />
 
-        <Button
-            android:id="@+id/showDialogBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dialog with simple list" />
 
         <Button
-            android:id="@+id/showDialogLongBtn"
+            android:id="@+id/showNewDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dialog with long list" />
+            android:text="ShowEmptyDialog" />
 
         <Button
-            android:id="@+id/showDialogHeadersBtn"
+            android:id="@+id/showMenuDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dialog with submenus" />
+            android:text="showMenuDialog" />
 
         <Button
-            android:id="@+id/showDialogGridBtn"
+            android:id="@+id/showNewGridDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dialog with a grid" />
+            android:text="showNewGridDialog" />
 
     </LinearLayout>
 

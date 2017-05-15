@@ -16,7 +16,47 @@
     </item>
 
 
-    <item android:title="">
+    <item android:title="Title1">
+        <menu>
+            <item
+                android:icon="@drawable/ic_cloud_upload_24dp"
+                android:title="Upload photos or videos" />
+            <item
+                android:icon="@drawable/ic_camera_alt_24dp"
+                android:title="Use Camera" />
+        </menu>
+    </item>
+    <item android:title="Title1">
+        <menu>
+            <item
+                android:icon="@drawable/ic_cloud_upload_24dp"
+                android:title="Upload photos or videos" />
+            <item
+                android:icon="@drawable/ic_camera_alt_24dp"
+                android:title="Use Camera" />
+        </menu>
+    </item>
+    <item android:title="Title1">
+        <menu>
+            <item
+                android:icon="@drawable/ic_cloud_upload_24dp"
+                android:title="Upload photos or videos" />
+            <item
+                android:icon="@drawable/ic_camera_alt_24dp"
+                android:title="Use Camera" />
+        </menu>
+    </item>
+    <item android:title="Title1">
+        <menu>
+            <item
+                android:icon="@drawable/ic_cloud_upload_24dp"
+                android:title="Upload photos or videos" />
+            <item
+                android:icon="@drawable/ic_camera_alt_24dp"
+                android:title="Use Camera" />
+        </menu>
+    </item>
+    <item android:title="Title1">
         <menu>
             <item
                 android:icon="@drawable/ic_cloud_upload_24dp"

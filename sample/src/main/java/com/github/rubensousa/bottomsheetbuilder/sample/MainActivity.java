@@ -1,54 +1,52 @@
 package com.github.rubensousa.bottomsheetbuilder.sample;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 
-import com.github.rubensousa.bottomsheetbuilder.BottomSheetBuilder;
 import com.github.rubensousa.bottomsheetbuilder.BottomSheetMenuDialog;
-import com.github.rubensousa.bottomsheetbuilder.adapter.BottomSheetItemClickListener;
-import com.github.rubensousa.bottomsheetbuilder.util.BottomSheetBuilderUtils;
+import com.github.rubensousa.bottomsheetbuilder.BsBuilder;
+import com.github.rubensousa.bottomsheetbuilder.bean.BsDividerItem;
+import com.github.rubensousa.bottomsheetbuilder.bean.BsMenuItem;
+import com.github.rubensousa.bottomsheetbuilder.viewbinder.ContentRecyclerBinder;
+import com.github.rubensousa.bottomsheetbuilder.viewbinder.DividerItemViewBinder;
+import com.github.rubensousa.bottomsheetbuilder.viewbinder.FooterBinder;
+import com.github.rubensousa.bottomsheetbuilder.viewbinder.HeaderBinder;
+import com.github.rubensousa.bottomsheetbuilder.viewbinder.MenuItemViewBinder;
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements BottomSheetItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
     public static final String STATE_SIMPLE = "state_simple";
     public static final String STATE_HEADER = "state_header";
     public static final String STATE_GRID = "state_grid";
     public static final String STATE_LONG = "state_long";
-
-    private BottomSheetMenuDialog mBottomSheetDialog;
-    private BottomSheetBehavior mBehavior;
-
     @BindView(R.id.fab)
     FloatingActionButton fab;
-
     @BindView(R.id.appbar)
     AppBarLayout appBarLayout;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
-
-    private boolean mShowingSimpleDialog;
-    private boolean mShowingHeaderDialog;
-    private boolean mShowingGridDialog;
-    private boolean mShowingLongDialog;
+    private BottomSheetMenuDialog mBottomSheetDialog;
+    private BottomSheetBehavior mBehavior;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +55,7 @@ public class MainActivity extends AppCompatActivity implements BottomSheetItemCl
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        View bottomSheet = new BottomSheetBuilder(this, coordinatorLayout)
-                .setMode(BottomSheetBuilder.MODE_GRID)
-                .setBackgroundColorResource(android.R.color.white)
-                .setMenu(R.menu.menu_bottom_grid_sheet)
-                .setItemClickListener(this)
-                .createView();
+        View bottomSheet = createView();
 
         mBehavior = BottomSheetBehavior.from(bottomSheet);
         mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -78,29 +71,6 @@ public class MainActivity extends AppCompatActivity implements BottomSheetItemCl
 
             }
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        BottomSheetBuilderUtils.saveState(outState, mBehavior);
-        outState.putBoolean(STATE_SIMPLE, mShowingSimpleDialog);
-        outState.putBoolean(STATE_GRID, mShowingGridDialog);
-        outState.putBoolean(STATE_HEADER, mShowingHeaderDialog);
-        outState.putBoolean(STATE_LONG, mShowingLongDialog);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        BottomSheetBuilderUtils.restoreState(savedInstanceState, mBehavior);
-        if (savedInstanceState.getBoolean(STATE_GRID)) onShowDialogGridClick();
-
-        if (savedInstanceState.getBoolean(STATE_HEADER)) onShowDialogHeadersClick();
-
-        if (savedInstanceState.getBoolean(STATE_SIMPLE)) onShowDialogClick();
-
-        if (savedInstanceState.getBoolean(STATE_LONG)) onShowLongDialogClick();
     }
 
     @Override
@@ -125,133 +95,163 @@ public class MainActivity extends AppCompatActivity implements BottomSheetItemCl
         mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.showDialogBtn)
-    public void onShowDialogClick() {
-        if (mBottomSheetDialog != null) {
-            mBottomSheetDialog.dismiss();
+
+    @OnClick(R.id.showNewDialog)
+    public void onShowNewDialog() {
+
+        List<Object> items = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            items.add(new BsMenuItem(i, null, "Share"));
         }
 
-        mShowingSimpleDialog = true;
-        mBottomSheetDialog = new BottomSheetBuilder(this)
-                .setMode(BottomSheetBuilder.MODE_LIST)
-                .setAppBarLayout(appBarLayout)
-                .addTitleItem("Custom title")
-                .addItem(0, "Preview", R.drawable.ic_preview_24dp)
-                .addItem(1, "Share", R.drawable.ic_share_24dp)
-                .addDividerItem()
-                .addItem(2, "Get link", R.drawable.ic_link_24dp)
-                .addItem(3, "Make a copy", R.drawable.ic_content_copy_24dp)
+        MenuItemViewBinder menuItemViewBinder = new MenuItemViewBinder.Builder()
+                .isGridLayout(false)
+                .gravity(Gravity.CENTER)
+                .mListener(new MenuItemViewBinder.BottomSheetItemClickListener() {
+                    @Override
+                    public void onBottomSheetItemClick(BsMenuItem item) {
+
+                    }
+                })
+                .build();
+
+        HorizontalDividerItemDecoration divider = new HorizontalDividerItemDecoration.Builder(this)
+                .colorResId(R.color.divider)
+                .sizeResId(R.dimen.d_0_5)
+                .marginResId(R.dimen.d_90)
+                .build();
+
+        ContentRecyclerBinder binder = new ContentRecyclerBinder.Builder(this)
+                .itemDecoration(divider)
+                .register(BsDividerItem.class, new DividerItemViewBinder())
+                .register(BsMenuItem.class, menuItemViewBinder)
+                .data(items)
+                .build();
+
+
+        mBottomSheetDialog = new BsBuilder(this, R.style.AppTheme_BottomSheetDialog_Custom)
+                .addHeaderView(new HeaderBinder.Builder().title("TestHeader").build())
+                .addContentView(binder)
                 .expandOnStart(true)
-                .setItemClickListener(new BottomSheetItemClickListener() {
-                    @Override
-                    public void onBottomSheetItemClick(MenuItem item) {
-                        Log.d("Item click", item.getTitle() + "");
-                        mShowingSimpleDialog = false;
-                    }
-                })
+                .setAppBarLayout(appBarLayout)
+                .addFooterView(new FooterBinder.Builder().title("TestFooter").build())
                 .createDialog();
-        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                mShowingSimpleDialog = false;
-            }
-        });
+
         mBottomSheetDialog.show();
     }
 
+    @OnClick(R.id.showMenuDialog)
+    public void showMenuDialog() {
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.showDialogHeadersBtn)
-    public void onShowDialogHeadersClick() {
-        if (mBottomSheetDialog != null) {
-            mBottomSheetDialog.dismiss();
-        }
-        mShowingHeaderDialog = true;
-        mBottomSheetDialog = new BottomSheetBuilder(this, R.style.AppTheme_BottomSheetDialog_Custom)
-                .setMode(BottomSheetBuilder.MODE_LIST)
+
+        MenuItemViewBinder menuItemViewBinder = new MenuItemViewBinder.Builder()
+                .isGridLayout(false)
+                .mListener(new MenuItemViewBinder.BottomSheetItemClickListener() {
+                    @Override
+                    public void onBottomSheetItemClick(BsMenuItem item) {
+
+                    }
+                })
+                .build();
+
+        ContentRecyclerBinder binder = new ContentRecyclerBinder.Builder(this)
+                .register(BsMenuItem.class, menuItemViewBinder)
+                .data(R.menu.menu_bottom_simple_sheet)
+                .build();
+
+        mBottomSheetDialog = new BsBuilder(this, R.style.AppTheme_BottomSheetDialog_Custom)
+                .addHeaderView(new HeaderBinder.Builder().title("TestHeader").build())
+                .addContentView(binder)
                 .setAppBarLayout(appBarLayout)
-                .setMenu(R.menu.menu_bottom_headers_sheet)
+                .createDialog();
+
+        mBottomSheetDialog.show();
+    }
+
+    @OnClick(R.id.showNewGridDialog)
+    public void showNewGridDialog() {
+
+        int columns = getResources().getInteger(R.integer.bottomsheet_grid_columns);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, columns);
+
+        float margin = getResources().getDimensionPixelSize(R.dimen.bottomsheet_grid_horizontal_margin);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        //获取屏幕信息
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int screenWidth = dm.widthPixels;
+        int screenHeigh = dm.heightPixels;
+        int itemWidth = (int) ((screenWidth - 2 * margin) / columns);
+
+        MenuItemViewBinder menuItemViewBinder = new MenuItemViewBinder.Builder()
+                .isGridLayout(true)
+                .mItemWidth(itemWidth)
+                .mListener(new MenuItemViewBinder.BottomSheetItemClickListener() {
+                    @Override
+                    public void onBottomSheetItemClick(BsMenuItem item) {
+
+                    }
+                })
+                .build();
+
+
+        ContentRecyclerBinder binder = new ContentRecyclerBinder.Builder(this)
+                .register(BsMenuItem.class, menuItemViewBinder)
+                .layoutManager(layoutManager)
+                .data(R.menu.menu_bottom_grid_sheet)
+                .build();
+
+
+        mBottomSheetDialog = new BsBuilder(this, R.style.AppTheme_BottomSheetDialog_Custom)
+                .addHeaderView(new HeaderBinder.Builder().title("TestHeader").build())
+                .addContentView(binder)
                 .expandOnStart(true)
-                .setItemClickListener(new BottomSheetItemClickListener() {
-                    @Override
-                    public void onBottomSheetItemClick(MenuItem item) {
-                        Log.d("Item click", item.getTitle() + "");
-                        mShowingHeaderDialog = false;
-                    }
-                })
+                .setAppBarLayout(appBarLayout)
                 .createDialog();
-        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                mShowingHeaderDialog = false;
-            }
-        });
+
         mBottomSheetDialog.show();
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.showDialogGridBtn)
-    public void onShowDialogGridClick() {
-        if (mBottomSheetDialog != null) {
-            mBottomSheetDialog.dismiss();
-        }
-        mShowingGridDialog = true;
-        mBottomSheetDialog = new BottomSheetBuilder(this, R.style.AppTheme_BottomSheetDialog)
-                .setMode(BottomSheetBuilder.MODE_GRID)
-                .setAppBarLayout(appBarLayout)
-                .setMenu(getResources().getBoolean(R.bool.tablet_landscape)
-                        ? R.menu.menu_bottom_grid_tablet_sheet : R.menu.menu_bottom_grid_sheet)
+
+    public View createView() {
+        int columns = getResources().getInteger(R.integer.bottomsheet_grid_columns);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, columns);
+        float margin = getResources().getDimensionPixelSize(R.dimen.bottomsheet_grid_horizontal_margin);
+        DisplayMetrics dm = new DisplayMetrics();
+        //获取屏幕信息
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int screenWidth = dm.widthPixels;
+        int screenHeight = dm.heightPixels;
+        int itemWidth = (int) ((screenWidth - 2 * margin) / columns);
+
+        MenuItemViewBinder menuItemViewBinder = new MenuItemViewBinder.Builder()
+                .isGridLayout(true)
+                .mItemWidth(itemWidth)
+                .mListener(new MenuItemViewBinder.BottomSheetItemClickListener() {
+                    @Override
+                    public void onBottomSheetItemClick(BsMenuItem item) {
+
+                    }
+                })
+                .build();
+
+        ContentRecyclerBinder binder = new ContentRecyclerBinder.Builder(this)
+                .register(BsMenuItem.class, menuItemViewBinder)
+                .layoutManager(layoutManager)
+                .data(R.menu.menu_bottom_grid_sheet)
+                .build();
+
+
+        return new BsBuilder(this, coordinatorLayout)
+                .addContentView(binder)
                 .expandOnStart(true)
-                .setItemClickListener(new BottomSheetItemClickListener() {
-                    @Override
-                    public void onBottomSheetItemClick(MenuItem item) {
-                        Log.d("Item click", item.getTitle() + "");
-                        mShowingGridDialog = false;
-                    }
-                })
-                .createDialog();
-
-        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                mShowingGridDialog = false;
-            }
-        });
-        mBottomSheetDialog.show();
-    }
-
-    @SuppressWarnings("unused")
-    @OnClick(R.id.showDialogLongBtn)
-    public void onShowLongDialogClick() {
-        if (mBottomSheetDialog != null) {
-            mBottomSheetDialog.dismiss();
-        }
-        mShowingLongDialog = true;
-        mBottomSheetDialog = new BottomSheetBuilder(this, R.style.AppTheme_BottomSheetDialog_Custom)
-                .setMode(BottomSheetBuilder.MODE_LIST)
                 .setAppBarLayout(appBarLayout)
-                .setMenu(R.menu.menu_bottom_list_sheet)
-                .setItemClickListener(new BottomSheetItemClickListener() {
-                    @Override
-                    public void onBottomSheetItemClick(MenuItem item) {
-                        Log.d("Item click", item.getTitle() + "");
-                        mShowingLongDialog = false;
-                    }
-                })
-                .createDialog();
+                .createView();
 
-        mBottomSheetDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                mShowingLongDialog = false;
-            }
-        });
-        mBottomSheetDialog.show();
+
     }
 
-    @Override
-    public void onBottomSheetItemClick(MenuItem item) {
-        mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
 }
