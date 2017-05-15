@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.rubensousa.bottomsheetbuilder.util;
+package com.github.lei.bsbuilder.util;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,10 +25,19 @@ import android.support.annotation.MenuRes;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.view.SupportMenuInflater;
 import android.support.v7.view.menu.MenuBuilder;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.github.rubensousa.bottomsheetbuilder.bean.BsMenuItem;
+import com.github.lei.bsbuilder.BsBuilder;
+import com.github.lei.bsbuilder.R;
+import com.github.lei.bsbuilder.bean.BsDividerItem;
+import com.github.lei.bsbuilder.bean.BsMenuItem;
+import com.github.lei.bsbuilder.viewbinder.ContentRecyclerBinder;
+import com.github.lei.bsbuilder.viewbinder.DividerItemViewBinder;
+import com.github.lei.bsbuilder.viewbinder.FooterBinder;
+import com.github.lei.bsbuilder.viewbinder.HeaderBinder;
+import com.github.lei.bsbuilder.viewbinder.MenuItemViewBinder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,5 +90,7 @@ public class BsBuilderUtils {
         }
         return items;
     }
+
+
 
 }

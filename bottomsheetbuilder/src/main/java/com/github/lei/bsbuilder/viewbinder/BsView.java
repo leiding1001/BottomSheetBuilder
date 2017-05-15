@@ -1,4 +1,4 @@
-package com.github.rubensousa.bottomsheetbuilder.viewbinder;
+package com.github.lei.bsbuilder.viewbinder;
 
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;

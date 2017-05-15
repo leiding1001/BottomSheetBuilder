@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.rubensousa.bottomsheetbuilder;
+package com.github.lei.bsbuilder;
 
 import android.content.Context;
 import android.os.Build;

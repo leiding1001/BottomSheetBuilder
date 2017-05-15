@@ -1,4 +1,4 @@
-package com.github.rubensousa.bottomsheetbuilder.bean;
+package com.github.lei.bsbuilder.bean;
 
 /**
  * Created by dinglei on 2017/5/12.

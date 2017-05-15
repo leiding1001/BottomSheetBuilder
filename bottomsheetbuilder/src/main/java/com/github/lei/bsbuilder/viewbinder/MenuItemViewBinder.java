@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.rubensousa.bottomsheetbuilder.viewbinder;
+package com.github.lei.bsbuilder.viewbinder;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.AppCompatImageView;
@@ -26,8 +26,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.rubensousa.bottomsheetbuilder.R;
-import com.github.rubensousa.bottomsheetbuilder.bean.BsMenuItem;
+import com.github.lei.bsbuilder.R;
+import com.github.lei.bsbuilder.bean.BsMenuItem;
 
 import me.drakeet.multitype.ItemViewBinder;
 

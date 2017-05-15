@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.rubensousa.bottomsheetbuilder.viewbinder;
+package com.github.lei.bsbuilder.viewbinder;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -22,8 +22,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.rubensousa.bottomsheetbuilder.R;
-import com.github.rubensousa.bottomsheetbuilder.bean.BsDividerItem;
+import com.github.lei.bsbuilder.R;
+import com.github.lei.bsbuilder.bean.BsDividerItem;
 
 import me.drakeet.multitype.ItemViewBinder;
 

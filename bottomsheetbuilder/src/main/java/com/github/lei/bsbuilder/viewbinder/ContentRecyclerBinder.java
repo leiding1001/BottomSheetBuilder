@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.github.rubensousa.bottomsheetbuilder.viewbinder;
+package com.github.lei.bsbuilder.viewbinder;
 
-import static com.github.rubensousa.bottomsheetbuilder.R.id.recyclerView;
 
 import android.content.Context;
 import android.support.annotation.MenuRes;
@@ -27,8 +26,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.rubensousa.bottomsheetbuilder.R;
-import com.github.rubensousa.bottomsheetbuilder.util.BsBuilderUtils;
+import com.github.lei.bsbuilder.R;
+import com.github.lei.bsbuilder.util.BsBuilderUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +58,7 @@ public class ContentRecyclerBinder implements BsView {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent) {
         View root = inflater.inflate(R.layout.bs_recyclerview, parent, true);
-        mRecyclerView = (RecyclerView) root.findViewById(recyclerView);
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 

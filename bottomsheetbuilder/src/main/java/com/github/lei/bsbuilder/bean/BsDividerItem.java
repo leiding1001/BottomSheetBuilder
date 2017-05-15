@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.rubensousa.bottomsheetbuilder.bean;
+package com.github.lei.bsbuilder.bean;
 
 import android.support.annotation.DrawableRes;
 

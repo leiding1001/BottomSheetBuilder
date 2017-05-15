@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.rubensousa.bottomsheetbuilder.viewbinder;
+package com.github.lei.bsbuilder.viewbinder;
 
 
 import android.support.annotation.NonNull;
@@ -23,7 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.github.rubensousa.bottomsheetbuilder.R;
+import com.github.lei.bsbuilder.R;
+
 
 /**
  * @author drakeet
